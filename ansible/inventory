@@ -1,0 +1,6 @@
+[appsrvgrp]
+vproapp ansible_host=192.168.56.102
+
+[appsrvgrp:vars]
+ansible_user=vagrant 
+ansible_password=vagrant

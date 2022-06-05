@@ -1,0 +1,44 @@
+version: "3"
+services:
+  vprodb:
+    image: {{nexus_host}}:{{nexus_docker_port}}/{{nexus_docker_repo}}/vprodb:V2
+    ports:
+      - 6603:3306
+    volumes:
+      - voldb:/var/lib/mysql
+    links:
+      - vproapp
+      - vprocache01
+      - vpromq01
+
+  vprocache01:
+    image: {{nexus_host}}:{{nexus_docker_port}}/{{nexus_docker_repo}}/vprocache01:V2
+    ports:
+      - 11211:11211
+    links:
+      - vpromq01
+
+  vpromq01:
+    image: {{nexus_host}}:{{nexus_docker_port}}/{{nexus_docker_repo}}/vpromq01:V2
+    ports:
+      - 5672:5672
+    links:
+      - vproapp
+
+  vproapp:
+    image: {{nexus_host}}:{{nexus_docker_port}}/{{nexus_docker_repo}}/vproapp:V2
+    ports:
+      - 8090:8080
+    volumes:
+      - volapp:/usr/local/tomcat/webapps
+
+  vproweb:
+    image: {{nexus_host}}:{{nexus_docker_port}}/{{nexus_docker_repo}}/vproweb:V2
+    ports:
+      - 80:80
+    links:
+      - vproapp
+      
+volumes:
+  voldb: {}
+  volapp: {}
